@@ -2,6 +2,7 @@
 using Server.Models;
 using System;
 using System.IO;
+using System.IO.MemoryMappedFiles;
 using System.Net;
 using System.Text;
 
@@ -11,6 +12,7 @@ namespace Server.DataManagers
     {
         public static void  CheckWeather()
         {
+            using (MemoryMappedFile memoryMappedFile = MemoryMappedFile.CreateNew("WeatherFile", 10000))//10000 - size of file
             using (WebClient wc = new WebClient())
             {
                 HttpWebRequest httpWebRequest = (HttpWebRequest)WebRequest.Create("http://api.openweathermap.org/data/2.5/weather?q=Lviv&units=metric&appid=74372e553fdda3a188f09f0ec7b2bd72");
@@ -33,7 +35,11 @@ namespace Server.DataManagers
                     $"\n\tdeg : {weatherResponse.Wind.Deg}" +
                     $"\n\tgust : {weatherResponse.Wind.Gust}";
                 byte[] data = Encoding.UTF8.GetBytes(toFile);
-               
+
+                using (MemoryMappedViewAccessor accessor = memoryMappedFile.CreateViewAccessor())
+                {
+                    accessor.WriteArray(0, toFile.ToCharArray(), 0, data.Length);
+                }
                 Console.WriteLine(toFile);
             }
         }
