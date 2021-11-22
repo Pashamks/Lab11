@@ -12,9 +12,10 @@ namespace Server
            
             while (true)
             {
-                if(Math.Abs(time.Minute - DateTime.Now.Minute) == 1)
+                if(Math.Abs(time.Day - DateTime.Now.Day) == 0)
                 {
-                    time = DateTime.Now;
+                    Console.WriteLine($"{DateTime.Now} Rate checker is working...");
+                    time = time.AddDays(1);
                     RatesManager.CheckRates();
                 }
                
