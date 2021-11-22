@@ -1,17 +1,20 @@
 ﻿using Server.DataManagers;
 using System;
 using System.IO.MemoryMappedFiles;
+using System.Threading;
 
 namespace Server
 {
     class Program
     {
         static DateTime timeWeather = DateTime.Now, timeRates = DateTime.Now, timeStockePrice = DateTime.Now;
+        static  MemoryMappedFile memoryMappedFileWeatherForecast = MemoryMappedFile.CreateNew("MMF_WeatherForecast", 10000);
+        static MemoryMappedFile memoryMappedFileExchangeRate = MemoryMappedFile.CreateNew("MMF_ExchangeRate", 10000);
+        static MemoryMappedFile memoryMappedFileStockPrices = MemoryMappedFile.CreateNew("MMF_StockPrices", 20000);
+        static Semaphore _pool;
         static void Main(string[] args)
         {
-            MemoryMappedFile memoryMappedFileWeatherForecast = MemoryMappedFile.CreateNew("MMF_WeatherForecast", 10000);
-            MemoryMappedFile memoryMappedFileExchangeRate = MemoryMappedFile.CreateNew("MMF_ExchangeRate", 10000);
-            MemoryMappedFile memoryMappedFileStockPrices = MemoryMappedFile.CreateNew("MMF_StockPrices", 20000);
+            Semaphore.TryOpenExisting("SynchronizationSemaphore", out _pool);
             while (true)
             {
                 if(Math.Abs(timeRates.Day - DateTime.Now.Day) == 0)
@@ -34,6 +37,7 @@ namespace Server
                     Console.WriteLine($"{DateTime.Now} Stocke price checker is working...");
                     timeStockePrice = timeStockePrice.AddMinutes(1);
                     StockPricesManager.CheckStockPrices(memoryMappedFileStockPrices);
+                    _pool.Release();
                 }
             }
         }
