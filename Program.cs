@@ -8,17 +8,22 @@ namespace Server
     {
         static void Main(string[] args)
         {
-            var time = DateTime.Now;
+            DateTime timeWeather = DateTime.Now, timeRates = DateTime.Now;
            
             while (true)
             {
-                if(Math.Abs(time.Day - DateTime.Now.Day) == 0)
+                if(Math.Abs(timeRates.Day - DateTime.Now.Day) == 0)
                 {
                     Console.WriteLine($"{DateTime.Now} Rate checker is working...");
-                    time = time.AddDays(1);
+                    timeRates = timeRates.AddDays(1);
                     RatesManager.CheckRates();
                 }
-               
+                if (Math.Abs(timeWeather.Minute - DateTime.Now.Minute) == 1)
+                {
+                    Console.WriteLine($"{DateTime.Now} Weather checker is working...");
+                    timeWeather = DateTime.Now;
+                    WeatherManager.CheckWeather();
+                }
             }
         }
     }
