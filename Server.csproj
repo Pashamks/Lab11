@@ -9,4 +9,16 @@
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Remove="LinuxServer\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Remove="LinuxServer\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="LinuxServer\**" />
+  </ItemGroup>
+
 </Project>
