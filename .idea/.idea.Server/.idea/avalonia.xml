@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AvaloniaProject">
+    <option name="projectPerEditor">
+      <map>
+        <entry key="LinuxClient/LinuxClient/MainWindow.axaml" value="LinuxClient/LinuxClient/LinuxClient.csproj" />
+        <entry key="lab11/Client/MainWindow.xaml" value="lab11/Client/Client.csproj" />
+      </map>
+    </option>
+  </component>
+</project>
